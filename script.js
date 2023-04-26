@@ -35,6 +35,7 @@ submitBtn.addEventListener('click', (e) => {
         completeBtn.addEventListener('click', (e) => {
             const task = e.target.parentElement.parentElement.firstChild;
             task.classList.toggle('completed');
+            saveLocal(deleted_task = task, option = 'completed');
          })
          
         updateBtn.addEventListener('click', (e) => {
@@ -59,12 +60,28 @@ submitBtn.addEventListener('click', (e) => {
     }
 })
 
-function saveLocal(deleted_task, update = false){
-    console.log(update)
+function saveLocal(deleted_task, option, update = false){
+
+    if(option == 'completed'){
+        let mytasks = Array.from(document.querySelectorAll('#task-list span'));
+        mytasks = (mytasks).map(task => {
+            if(task.classList.contains('completed')){
+                return task.textContent + ' /completed/';
+            } else if(!task.textContent.includes(' /completed/')){
+                console.log(task)
+                return task.textContent.replace(' /completed/');
+            }
+        })
+        localStorage.setItem('todos', JSON.stringify(mytasks));
+        return
+        
+    }
+
     let mytasks = Array.from(document.querySelectorAll('#task-list span'));
     mytasks = (mytasks).map(task => {
         return task.textContent;
     })
+
     mytasks = mytasks.filter(task => {
         return task != deleted_task});
     localStorage.setItem('todos', JSON.stringify(mytasks));
@@ -92,8 +109,12 @@ function getLocal(){
         updateBtn.classList.add('update-btn', 'p-2', 'rounded', 'text-light');
         completeBtn.classList.add('complete-btn', 'p-2', 'rounded', 'text-light');
         deleteBtn.classList.add('delete-btn', 'p-2', 'rounded', 'text-light');
+
+        if(task.includes(' /completed/')){
+            span.classList.add('completed')
+        }
         
-        span.textContent = task;
+        span.textContent = task.replace(' /completed/', '');
     
         taskList.prepend(li);
         li.appendChild(span);
@@ -105,6 +126,7 @@ function getLocal(){
         completeBtn.addEventListener('click', (e) => {
             const task = e.target.parentElement.parentElement.firstChild;
             task.classList.toggle('completed');
+            saveLocal(deleted_task = task, option = 'completed');
          })
          
         updateBtn.addEventListener('click', (e) => {
@@ -112,7 +134,6 @@ function getLocal(){
             task.toggleAttribute('contenteditable');
             task.style.backgroundColor = style ? 'var(--light-gray)' : 'transparent';
             style = !style;
-            console.log(task.style.backgroundColor == 'transparent')
             if(task.style.backgroundColor == 'transparent'){
                 saveLocal()
             }
