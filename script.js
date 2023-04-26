@@ -43,6 +43,9 @@ submitBtn.addEventListener('click', (e) => {
             task.toggleAttribute('contenteditable');
             task.style.backgroundColor = style ? 'var(--light-gray)' : 'transparent';
             style = !style;
+            if(task.style.backgroundColor == 'transparent'){
+                saveLocal(deleted_task = task, option = 'completed')
+            }
          })
             
         deleteBtn.addEventListener('click', (e) => {
@@ -60,31 +63,27 @@ submitBtn.addEventListener('click', (e) => {
     }
 })
 
-function saveLocal(deleted_task, option, update = false){
-
-    if(option == 'completed'){
-        let mytasks = Array.from(document.querySelectorAll('#task-list span'));
+function saveLocal(deleted_task, option){
+    let mytasks = Array.from(document.querySelectorAll('#task-list span'));
+    if(true){
         mytasks = (mytasks).map(task => {
             if(task.classList.contains('completed')){
                 return task.textContent + ' /completed/';
             } else if(!task.textContent.includes(' /completed/')){
-                console.log(task)
                 return task.textContent.replace(' /completed/');
             }
         })
         localStorage.setItem('todos', JSON.stringify(mytasks));
-        return
-        
+    }
+    if(option != 'completed'){
+        console.log(mytasks)
+        console.log(deleted_task)
+        mytasks = mytasks.filter(task => {
+            return task.replace(' /completed/', '') != deleted_task});
+        localStorage.setItem('todos', JSON.stringify(mytasks));
+        console.log(mytasks)
     }
 
-    let mytasks = Array.from(document.querySelectorAll('#task-list span'));
-    mytasks = (mytasks).map(task => {
-        return task.textContent;
-    })
-
-    mytasks = mytasks.filter(task => {
-        return task != deleted_task});
-    localStorage.setItem('todos', JSON.stringify(mytasks));
 }
 
 function getLocal(){
@@ -135,13 +134,13 @@ function getLocal(){
             task.style.backgroundColor = style ? 'var(--light-gray)' : 'transparent';
             style = !style;
             if(task.style.backgroundColor == 'transparent'){
-                saveLocal()
+                saveLocal(deleted_task = task, option = 'completed')
             }
          })
             
         deleteBtn.addEventListener('click', (e) => {
             const task = e.target.parentElement.parentElement;
-            saveLocal(task.firstChild.textContent)
+            saveLocal(deleted_task = task.firstChild.textContent, option = '')
             task.remove();
          })
     })
