@@ -2,8 +2,11 @@
 
 
 :root{
-    --header-bg: rgb(88, 85, 255);
+    --main-bg: rgb(0, 4, 118);
     --light-gray: rgb(234, 234, 234);
+    --red: rgb(255, 0, 0);
+    --green: rgb(0, 128, 0);
+    --blue: rgb(0, 0, 255);
 }
 
 *,
@@ -39,7 +42,11 @@ li span{
 }
 
 header{
-    background-color: var(--header-bg);
+    background-color: var(--main-bg);
+}
+
+header span{
+    color: var(--light-gray) !important;
 }
 
 .todo{
@@ -51,11 +58,11 @@ header{
 }
 
 input[type="submit"]{
-    background-color: var(--header-bg);
+    background-color: var(--main-bg);
 }
 
 .complete-btn{
-    background-color: green;
+    background-color: var(--green);
 }
 
 .completed{
@@ -63,9 +70,22 @@ input[type="submit"]{
 }
 
 .update-btn{
-    background-color: blue;
+    background-color: var(--blue);
 }
 
 .delete-btn{
-    background-color: red;
+    background-color: var(--red);
+}
+
+@media only screen and (max-width: 768px){
+    li{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media only screen and (max-width: 576px){
+    html{
+        font-size: 85.2%;
+    }
 }
